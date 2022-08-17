@@ -1,0 +1,51 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+<div class="container col-md-8 text-center mt-3">
+   <div class="row">
+      <div class="col-4">
+         <div class="card">
+            <img src="{{ student.image }}" width="300" height="300">
+         </div>
+      </div>
+      <div class="col-6">
+         <table class="table table-bordered">
+            <tr>
+               <th colspan="2" class="bg-light">
+                  <h2 class="text-danger"> Student Information </h2>
+               </th>
+            </tr>
+            <tr class="h4">
+               <th>Name</th>
+               <td>{{ student.name }}</td>
+            </tr>
+            <tr class="h4">
+               <th>D.O.B </th>
+               <td>{{ student.dob }} </td>
+            </tr>
+            <tr class="h4">
+                <th>Sex </th>
+                <td>{{ student.sex }} </td>
+             </tr>
+            <tr class="h4">
+               <th>Address</th>
+               <td>{{ student.address }}</td>
+            </tr>
+            {# <tr class="h4">
+               <th class="col-md-4">Published Books</th>
+               <td class="col-md-8">
+               {% if student.books != null %}
+                  {% for book in student.books %}
+                     <a href="{{ path('book_detail', {'id' : book.id })}}">
+                        {{ book.title }} 
+                     </a>
+                     <br>
+                  {% endfor %}
+               {% endif %}
+               </td>
+            </tr> #}
+         </table>
+      </div>
+   </div>
+</div>
+{% endblock %}
