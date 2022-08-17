@@ -16,7 +16,7 @@ class StudentType extends AbstractType
         $builder
             ->add('name', TextType::class,
             [
-                'label' => 'Student name',
+                'label' => 'Student Name',
                 'attr' => [
                     'minlength' => 3,
                     'maxlength' => 30
@@ -24,7 +24,7 @@ class StudentType extends AbstractType
             ])
             ->add('dob', DateType::class,
             [
-                'label' => 'D.O.B',
+                'label' => 'Student D.O.B',
                 'widget' => 'single_text'
             ])
             ->add('sex', TextType::class,
@@ -37,7 +37,7 @@ class StudentType extends AbstractType
             ])
             ->add('address', TextType::class,
             [
-                'label' => 'Student address',
+                'label' => 'Student Address',
                 'attr' => [
                     'minlength' => 3,
                     'maxlength' => 30
@@ -45,7 +45,7 @@ class StudentType extends AbstractType
             ])
             ->add('image', TextType::class,
             [
-                'label' => 'Author image',
+                'label' => 'Student Image',
                 'attr' => [
                     'maxlength' => 255
                 ]

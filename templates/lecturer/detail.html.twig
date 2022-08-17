@@ -1,0 +1,26 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+    <div class="container col-md-8 text-center mt-3">
+        <div class="row">
+            <div class="col-4">
+                <div class="card">
+                    <img src="{{ lecturer.image }}" width="300" height="300">
+                </div>
+            </div>
+            <div class="col-8">
+                <table class="table table-bordered">
+                    <tr>
+                        <th colspan="2" class="bg-success">
+                            <h2 class="text-danger">{{ lecturer.name }}</h2>
+                        </th>
+                    </tr>
+                    <tr class="h4">
+                        <th>Lecturer D.O.B</th>
+                        <td>{{ lecturer.dob | date('d/m/Y') }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock body %}

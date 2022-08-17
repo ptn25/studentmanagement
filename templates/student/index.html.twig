@@ -10,7 +10,7 @@
         </th>
         <th>
             <a class="text-decoration-none" href="{{ path('student_add') }}">
-                <img src="{{ asset('image/buttons/add.png') }}" width="40" height="40">
+                <img src="{{ asset('images/buttons/add.png') }}" width="40" height="40">
             </a>
         </th>
     </tr>
@@ -35,15 +35,15 @@
            </td>
             <td>
                 <a class="text-decoration-none" href="{{ path('student_detail', {'id' : student.id }) }}">
-                    <img src="{{ asset('image/buttons/detail.png') }}" width="40" height="40">
+                    <img src="{{ asset('images/buttons/detail.png') }}" width="40" height="40">
                 </a>
                 <a class="text-decoration-none" href="{{ path('student_edit', {'id' : student.id }) }}">
-                    <img src="{{ asset('image/buttons/edit.png') }}" width="40" height="40">
+                    <img src="{{ asset('images/buttons/edit.png') }}" width="40" height="40">
                 </a>
                 <a class="text-decoration-none" href="{{ path('student_delete', {'id' : student.id }) }}"
                 onclick="return confirm('Are you sure to delete this Student ?');"
                 >
-                    <img src="{{ asset('image/buttons/delete.png') }}" width="40" height="40">
+                    <img src="{{ asset('images/buttons/delete.png') }}" width="40" height="40">
                 </a>
             </td>
         </tr>
