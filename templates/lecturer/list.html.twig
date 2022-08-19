@@ -8,18 +8,11 @@
         <th colspan="6">
             <h1 class="text text-primary">lecturer List</h1>
         </th>
-        <th>
-            <a class="text-decoration-none" href="{{ path('lecturer_add') }}">
-                <img src="{{ asset('images/buttons/add.png') }}" width="40" height="40">
-            </a>
-        </th>
     </tr>
     <tr>
         <th class="text text-success">lecturer Id</th>
         <th class="text text-success">lecturer Name</th>
         <th class="text text-success">lecturer D.O.B</th>
-        <th class="text text-success">lecturer Sex</th>
-        <th class="text text-success">lecturer Address</th>
         <th class="text text-success">lecturer Image</th>
         <th class="text text-success">Actions</th>
     </tr>
@@ -28,8 +21,6 @@
             <td>{{ lecturer.id }}</td>
             <td>{{ lecturer.name }}</td>
             <td>{{ lecturer.dob | date('d/m/Y') }}</td>
-            <td>{{ lecturer.sex }}</td>
-            <td>{{ lecturer.address }}</td>
             <td>
                 <img src="{{ lecturer.image }}" width="100" height="100">
            </td>
