@@ -4,7 +4,7 @@
 {% block body %}
 	<div class="container mt-3 text-center">
 		<h1 class="text text-danger">
-			Student List
+			Class List
 		</h1>
 		<div
 			class="row">
@@ -12,8 +12,8 @@
 				<div class="row">
 					<div class="col">
 						<div class="form-group">
-							<form action="{{ path('search_student') }}" method="post">
-								<input class="form-control" type="search" name="keyword" placeholder="Search student's name" required maxlength="10">
+							<form action="{{ path('search_classes') }}" method="post">
+								<input class="form-control" type="search" name="keyword" placeholder="Search classe's name" required maxlength="10">
 							</form>
 						</div>
 					</div>
@@ -22,16 +22,15 @@
 		</div>
 			<div class="card-group">
 				<div class="row">
-					{% for student in students %}
-						{% if students | length < 4 %}
+					{% for classes in classes %}
+						{% if classes | length < 4 %}
 							<div class="col mt-4">
 							{% else %}
 								<div class="col-md-3 mt-4">
 								{% endif %}
 								<div class="card">
-									<a href="{{ path('student_detail', {'id' : student.name })}}">
-									<h3 class="text text-success">
-										{{ student.name }}
+									<a href="{{ path('classes_detail', {'id' : classes.id })}}"><h3 class="text text-success">
+										{{ classes.name }}
 									</h3>
 									</a>
 									</div>

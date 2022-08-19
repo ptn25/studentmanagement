@@ -4,12 +4,12 @@ namespace App\Controller;
 
 use App\Entity\Lecturer;
 use App\Form\LecturerType;
-use App\Repository\StudentRepository;
 use App\Repository\LecturerRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/lecturer')]
@@ -96,9 +96,9 @@ class LecturerController extends AbstractController
     }
     #[IsGranted('ROLE_USER')]
     #[Route('/search', name: 'search_lecturer')]
-    public function searchStudent(StudentRepository $studentRepository, Request $request) {
-    $students = $studentRepository->searchStudent($request->get('keyword'));
-    if ($students == null) {
+    public function searchLecturer(LecturerRepository $LecturerRepository, Request $request) {
+    $lecturers = $LecturerRepository->searchLecturer($request->get('keyword'));
+    if ($lecturers == null) {
       $this->addFlash("Warning", "No lecturer found !");
     }
     $session = $request->getSession();

@@ -8,17 +8,32 @@ use App\Repository\ClassesRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/classes')]
 class ClassesController extends AbstractController
 {
-    #[Route('/', name: 'classes_index', methods: ['GET'])]
-    public function index(ClassesRepository $classesRepository): Response
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/index', name: 'classes_index', methods: ['GET'])]
+    public function index(classesRepository $classesRepository): Response
     {
         return $this->render('classes/index.html.twig', [
             'classes' => $classesRepository->findAll(),
         ]);
+    }
+
+    #[IsGranted('ROLE_USER')]
+    #[Route('/list', name: 'classes_list')]
+    public function classesList () {
+        $classes = $this->getDoctrine()->getRepository(classes::class)->findAll();
+        $session = new Session();
+        $session->set('search', false);
+        return $this->render('classes/list.html.twig',
+            [
+                'classes' => $classes
+            ]);
     }
 
     #[Route('/new', name: 'app_classes_new', methods: ['GET', 'POST'])]
@@ -72,5 +87,19 @@ class ClassesController extends AbstractController
         }
 
         return $this->redirectToRoute('classes_index', [], Response::HTTP_SEE_OTHER);
+    }
+    #[IsGranted('ROLE_USER')]
+    #[Route('/search', name: 'search_classes')]
+    public function searchClasses(ClassesRepository $ClassesRepository, Request $request) {
+    $classes = $ClassesRepository->searchClasses($request->get('keyword'));
+    if ($classes == null) {
+      $this->addFlash("Warning", "No Classes found !");
+    }
+    $session = $request->getSession();
+    $session->set('search', true);
+    return $this->render('Classes/list.html.twig', 
+    [
+        'classes' => $classes,
+    ]);
     }
 }
