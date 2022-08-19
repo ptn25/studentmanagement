@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Student;
 use App\Form\StudentType;
 use App\Repository\StudentRepository;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -43,7 +44,7 @@ class StudentController extends AbstractController
         $this->addFlash('Warning', 'Invalid student id !');
         return $this->redirectToRoute('student_index');
     }
-    return $this->render('student/show.html.twig',
+    return $this->render('student/detail.html.twig',
         [
             'student' => $student
         ]);
@@ -66,14 +67,6 @@ class StudentController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'student_show', methods: ['GET'])]
-    public function show(Student $student): Response
-    {
-        return $this->render('student/show.html.twig', [
-            'student' => $student,
-        ]);
-    }
-
     #[Route('/edit/{id}', name: 'student_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Student $student, StudentRepository $studentRepository): Response
     {
@@ -87,19 +80,24 @@ class StudentController extends AbstractController
 
         return $this->renderForm('student/edit.html.twig', [
             'student' => $student,
-            'form' => $form,
+            'studentForm' => $form,
         ]);
     }
 
-    #[Route('/delete/{id}', name: 'student_delete', methods: ['POST'])]
-    public function delete(Request $request, Student $student, StudentRepository $studentRepository): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$student->getId(), $request->request->get('_token'))) {
-            $studentRepository->remove($student);
+    #[Route('/delete/{id}', name: 'student_delete')]
+    public function bookDelete ($id, ManagerRegistry $managerRegistry) {
+        $student = $managerRegistry->getRepository(Student::class)->find($id);
+        if ($student == null) {
+            $this->addFlash('Warning', 'Student not existed !');
+        
+        } else {
+            $manager = $managerRegistry->getManager();
+            $manager->remove($student);
+            $manager->flush();
+            $this->addFlash('Info', 'Delete book successfully !');
         }
-
-        return $this->redirectToRoute('student_index', [], Response::HTTP_SEE_OTHER);
-    }
+        return $this->redirectToRoute('student_index');
+      }
     #[IsGranted('ROLE_USER')]
     #[Route('/search', name: 'search_student')]
     public function searchStudent(StudentRepository $studentRepository, Request $request) {

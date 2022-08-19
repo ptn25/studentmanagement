@@ -43,7 +43,7 @@ class LecturerController extends AbstractController
                 $this->addFlash('Warning', 'Invalid lecturer id !');
                 return $this->redirectToRoute('lecturer_index');
             }
-            return $this->render('lecturer/show.html.twig',
+            return $this->render('lecturer/detail.html.twig',
                 [
                     'lecturer' => $lecturer
                 ]);
@@ -71,7 +71,7 @@ class LecturerController extends AbstractController
     #[Route('/edit/{id}', name: 'lecturer_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Lecturer $lecturer, LecturerRepository $lecturerRepository): Response
     {
-        $form = $this->createForm(Lecturer1Type::class, $lecturer);
+        $form = $this->createForm(LecturerType::class, $lecturer);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

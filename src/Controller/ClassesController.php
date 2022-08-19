@@ -30,7 +30,7 @@ class ClassesController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $classesRepository->add($class);
-            return $this->redirectToRoute('app_classes_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('classes_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('classes/new.html.twig', [
@@ -50,12 +50,12 @@ class ClassesController extends AbstractController
     #[Route('/{id}/edit', name: 'app_classes_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Classes $class, ClassesRepository $classesRepository): Response
     {
-        $form = $this->createForm(Classes1Type::class, $class);
+        $form = $this->createForm(ClassesType::class, $class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $classesRepository->add($class);
-            return $this->redirectToRoute('app_classes_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('classes_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('classes/edit.html.twig', [
@@ -71,6 +71,6 @@ class ClassesController extends AbstractController
             $classesRepository->remove($class);
         }
 
-        return $this->redirectToRoute('app_classes_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('classes_index', [], Response::HTTP_SEE_OTHER);
     }
 }
