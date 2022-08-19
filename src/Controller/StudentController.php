@@ -48,7 +48,7 @@ class StudentController extends AbstractController
             'student' => $student
         ]);
   }
-    #[Route('/new', name: 'student_new', methods: ['GET', 'POST'])]
+    #[Route('/new', name: 'student_add', methods: ['GET', 'POST'])]
     public function new(Request $request, StudentRepository $studentRepository): Response
     {
         $student = new Student();
@@ -113,19 +113,5 @@ class StudentController extends AbstractController
     [
         'students' => $students,
     ]);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   }
 }

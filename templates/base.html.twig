@@ -33,7 +33,7 @@
 							<a class="nav-link text-danger" href="{{ path('student_index')}}">Student</a>
 						</li>
 						<li class="nav-item h1">
-							<a class="nav-link text-danger" href="{{ path('lectuer_index')}}">Lecturer</a>
+							<a class="nav-link text-danger" href="{{ path('lecturer_index')}}">Lecturer</a>
 						</li>
 						<li class="nav-item h1">
 							<a class="nav-link text-danger" href="{{ path('classes_index')}}">Classes</a>
@@ -59,7 +59,7 @@
 						<li class="nav-item h1">
 							<a class="nav-link text-danger" data-bs-toggle="modal" data-bs-target="#modelId">About</a>
 						</li>
-						{# <li class="nav-item h1">
+						<li class="nav-item h1">
 							<a class="nav-link text-danger" href="{{ path('app_logout')}}">Logout
 								<u>
 									<i>
@@ -69,7 +69,8 @@
 									</i>
 								</u>
 							</a>
-						</li> #}
+						</li>
+
 					</ul>
 				{% endif %}
 
@@ -86,9 +87,8 @@
 						</div>
 						<div class="modal-body">
 							<div class="container text-center">
-								<h5 class="text text-primary">Demo web application by Symfony</h5>
-								<h6 class="text text-success">Copyright by Greenwich University (Vietnam)</h6>
-								<img src="https://duhocvinedu.edu.vn/wp-content/uploads/2020/11/university-of-greenwich-diem-den-day-uy-vong-o-nuoc-anh.jpg" width="250" height="200">
+								<h6 class="text text-success">Copyright by KaitoKid</h6>
+								<img src="https://i.pinimg.com/originals/1e/95/03/1e95032ce9a2f12fd49fa5a7f07b82d3.jpg" width="250" height="200">
 								<br>
 							</div>
 						</div>
@@ -111,7 +111,7 @@
 
 		{% block footer %}
 			<div class="container col-10 mt-3 text-center">
-				<p class="alert alert-success h5">WEB PROJECT - WEBG301 - SUMMER 2022</p>
+				<p class="alert alert-success h5">STUDENT MANAGEMENT SYSTEM</p>
 			</div>
 		{% endblock %}
 	</body>

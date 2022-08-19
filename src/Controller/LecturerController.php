@@ -3,120 +3,101 @@
 namespace App\Controller;
 
 use App\Entity\Lecturer;
-use App\Form\LecturerType;
+use App\Form\Lecturer1Type;
 use App\Repository\LecturerRepository;
-use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-/**
- * @Route("/lecturer")
- */
+#[Route('/lecturer')]
 class LecturerController extends AbstractController
 {
-    /**
-     * @Route("/index", name="lecturer_index")
-     */
-    public function lecturerIndex()
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/index', name: 'lecturer_index', methods: ['GET'])]
+    public function index(LecturerRepository $lecturerRepository): Response
     {
-        $lecturers = $this->getDoctrine()->getRepository(Lecturer::class)->findAll();
-        return $this->render('lecturer/index.html.twig',
-        [
-            'lecturers' => $lecturers
+        return $this->render('lecturer/index.html.twig', [
+            'lecturers' => $lecturerRepository->findAll(),
         ]);
     }
 
-    /**
-     * @Route("/list", name="lecturer_list")
-     */
-    public function lecturerList()
-    {
-        $lecturers = $this->getDoctrine()->getRepository(Lecturer::class)->findAll();
-        return $this->render('lecturer/list.html.twig',
+  #[IsGranted('ROLE_USER')]
+  #[Route('/list', name: 'lecturer_list')]
+  public function lecturerList () {
+    $lecturers = $this->getDoctrine()->getRepository(Lecturer::class)->findAll();
+    $session = new Session();
+    $session->set('search', false);
+    return $this->render('lecturer/list.html.twig',
         [
             'lecturers' => $lecturers
         ]);
-    }
+  }
 
-    /**
-     * @Route("/detail/{id}", name="lecturer_detail")
-     */
-    public function LecturerDetail($id, LecturerRepository $lecturerRepository)
+    #[Route('/new', name: 'app_lecturer_new', methods: ['GET', 'POST'])]
+    public function new(Request $request, LecturerRepository $lecturerRepository): Response
     {
-        $lecturer = $lecturerRepository->find($id);
-        if ($lecturer == null) {
-            $this->addFlash('Warning', 'Invalid lecturer id !');
-            return $this->redirectToRoute('lecturer_index');
-        }
-        return $this->render('lecturer/detail.html.twig',
-            [
-                'lecturer' => $lecturer
-            ]
-        );
-    }
-
-    /**
-     * @Route("/delete/{id}", name="lecturer_delete")
-     */
-    public function lecturerDelete($id, ManagerRegistry $managerRegistry)
-    {
-        $lecturer = $managerRegistry->getRepository(Lecturer::class)->find($id);
-        if ($lecturer == null) {
-            $this->addFlash('Warning', 'Lecturer not existed !');
-            return $this->redirectToRoute('lecturer_index');
-        } else {
-            $manager = $managerRegistry->getManager();
-            $manager->remove($lecturer);
-            $manager->flush();
-            $this->addFlash('Info', 'Delete lecturer successfully !');
-        }
-        return $this->redirectToRoute('lecturer_index');
-    }
-
-    /**
-     * @Route("/add", name="lecturer_add")
-     */
-    public function lecturerAdd (Request $request) {
-        $lecturer = new Lecturer;
-        $form = $this->createForm(LecturerType::class,$lecturer);
+        $lecturer = new Lecturer();
+        $form = $this->createForm(Lecturer1Type::class, $lecturer);
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
-            $manager = $this->getDoctrine()->getManager();
-            $manager->persist($lecturer);
-            $manager->flush();
-            $this->addFlash('Info','Add lecturer successfully !');
-            return $this->redirectToRoute('lecturer_index');
+            $lecturerRepository->add($lecturer);
+            return $this->redirectToRoute('app_lecturer_index', [], Response::HTTP_SEE_OTHER);
         }
-        return $this->renderForm('lecturer/add.html.twig',
-        [
-            'lecturerForm' => $form
+
+        return $this->renderForm('lecturer/new.html.twig', [
+            'lecturer' => $lecturer,
+            'form' => $form,
         ]);
     }
 
-    /**
-     * @Route("/edit/{id}", name="lecturer_edit")
-     */
-    public function lecturerEdit ($id, Request $request) {
-        $lecturer = $this->getDoctrine()->getRepository(Lecturer::class)->find($id);
-        if ($lecturer == null) {
-            $this->addFlash('Warning', 'Lecturer not existed !');
-            return $this->redirectToRoute('lecturer_index');
-        } else {
-            $form = $this->createForm(LecturerType::class,$lecturer);
-            $form->handleRequest($request);
-            if ($form->isSubmitted() && $form->isValid()) {
-                $manager = $this->getDoctrine()->getManager();
-                $manager->persist($lecturer);
-                $manager->flush();
-                $this->addFlash('Info','Edit lecturer successfully !');
-                return $this->redirectToRoute('lecturer_index');
-            }
-            return $this->renderForm('lecturer/edit.html.twig',
-            [
-                'lecturerForm' => $form
-            ]);
+    #[Route('/{id}', name: 'app_lecturer_show', methods: ['GET'])]
+    public function show(Lecturer $lecturer): Response
+    {
+        return $this->render('lecturer/show.html.twig', [
+            'lecturer' => $lecturer,
+        ]);
+    }
+
+    #[Route('/{id}/edit', name: 'app_lecturer_edit', methods: ['GET', 'POST'])]
+    public function edit(Request $request, Lecturer $lecturer, LecturerRepository $lecturerRepository): Response
+    {
+        $form = $this->createForm(Lecturer1Type::class, $lecturer);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $lecturerRepository->add($lecturer);
+            return $this->redirectToRoute('app_lecturer_index', [], Response::HTTP_SEE_OTHER);
         }
+
+        return $this->renderForm('lecturer/edit.html.twig', [
+            'lecturer' => $lecturer,
+            'form' => $form,
+        ]);
+    }
+
+    #[Route('/{id}', name: 'app_lecturer_delete', methods: ['POST'])]
+    public function delete(Request $request, Lecturer $lecturer, LecturerRepository $lecturerRepository): Response
+    {
+        if ($this->isCsrfTokenValid('delete'.$lecturer->getId(), $request->request->get('_token'))) {
+            $lecturerRepository->remove($lecturer);
+        }
+
+        return $this->redirectToRoute('app_lecturer_index', [], Response::HTTP_SEE_OTHER);
+    }
+    #[IsGranted('ROLE_USER')]
+    #[Route('/search', name: 'search_lecturer')]
+    public function searchStudent(StudentRepository $studentRepository, Request $request) {
+    $students = $studentRepository->searchStudent($request->get('keyword'));
+    if ($students == null) {
+      $this->addFlash("Warning", "No lecturer found !");
+    }
+    $session = $request->getSession();
+    $session->set('search', true);
+    return $this->render('lecturer/list.html.twig', 
+    [
+        'lecturers' => $lecturers,
+    ]);
     }
 }

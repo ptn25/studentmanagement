@@ -4,19 +4,19 @@
 {% block body %}
 	<div class="container mt-3 text-center">
 		<h1 class="text text-danger">
-			Student List
+			Lecturer List
 		</h1>
 		<div
 			class="row">
 			<div class="col-md-7">
 				<div class="row">
 					<div class="col">
-						<h5 class="text text-primary">Search student</h5>
+						<h5 class="text text-primary">Search lecturer</h5>
 					</div>
 					<div class="col">
 						<div class="form-group">
-							<form action="{{ path('search_student') }}" method="post">
-								<input class="form-control" type="search" name="keyword" placeholder="Enter student's name" required maxlength="10">
+							<form action="{{ path('search_lecturer') }}" method="post">
+								<input class="form-control" type="search" name="keyword" placeholder="Enter lecturer's name" required maxlength="10">
 							</form>
 						</div>
 					</div>
@@ -25,16 +25,15 @@
 		</div>
 			<div class="card-group">
 				<div class="row">
-					{% for student in students %}
-						{% if students | length < 4 %}
+					{% for lecturer in lecturers %}
+						{% if lecturers | length < 4 %}
 							<div class="col mt-4">
 							{% else %}
 								<div class="col-md-3 mt-4">
 								{% endif %}
 								<div class="card">
-									<a href="{{ path('student_detail', {'id' : student.name })}}">
-									<h3 class="text text-success">
-										{{ student.name }}
+									<a href="{{ path('lecturer_detail', {'id' : lecturer.name })}}"><h3 class="text text-success">
+										{{ lecturer.name }}
 									</h3>
 									</a>
 									</div>
@@ -42,5 +41,6 @@
 						{% endfor %}
 					</div>
 				</div>
+			{% endif %}
 		</div>
 	{% endblock %}

@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Lecturer{% endblock %}
+
+{% block body %}
+    <h1>Create new Lecturer</h1>
+
+    {{ include('lecturer/_form.html.twig') }}
+
+    <a href="{{ path('app_lecturer_index') }}">back to list</a>
+{% endblock %}
