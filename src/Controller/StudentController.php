@@ -5,118 +5,127 @@ namespace App\Controller;
 use App\Entity\Student;
 use App\Form\StudentType;
 use App\Repository\StudentRepository;
-use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-/**
- * @Route("/student")
- */
+#[Route('/student')]
 class StudentController extends AbstractController
 {
-    /**
-     * @Route("/index", name="student_index")
-     */
-    public function studentIndex()
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/index', name: 'student_index', methods: ['GET'])]
+    public function index(StudentRepository $studentRepository): Response
     {
-        $students = $this->getDoctrine()->getRepository(Student::class)->findAll();
-        return $this->render('student/index.html.twig',
-        [
-            'students' => $students
+        return $this->render('student/index.html.twig', [
+            'students' => $studentRepository->findAll(),
         ]);
     }
 
-    /**
-     * @Route("/list", name="student_list")
-     */
-    public function studentList()
-    {
-        $students = $this->getDoctrine()->getRepository(Student::class)->findAll();
-        return $this->render('student/list.html.twig',
+  #[IsGranted('ROLE_USER')]
+  #[Route('/list', name: 'student_list')]
+  public function studentList () {
+    $students = $this->getDoctrine()->getRepository(Student::class)->findAll();
+    $session = new Session();
+    $session->set('search', false);
+    return $this->render('student/list.html.twig',
         [
             'students' => $students
         ]);
-    }
+  }
 
-    /**
-     * @Route("/detail/{id}", name="student_detail")
-     */
-    public function studentDetail($id, StudentRepository $StudentRepository)
-    {
-        $student = $StudentRepository->find($id);
-        if ($student == null) {
-            $this->addFlash('Warning', 'Invalid student id !');
-            return $this->redirectToRoute('student_index');
-        }
-        return $this->render('student/detail.html.twig',
-            [
-                'student' => $student
-            ]
-        );
-    }
-
-    /**
-     * @Route("/delete/{id}", name="student_delete")
-     */
-    public function studentDelete($id, ManagerRegistry $managerRegistry)
-    {
-        $student = $managerRegistry->getRepository(Student::class)->find($id);
-        if ($student == null) {
-            $this->addFlash('Warning', 'student not existed !');
-            return $this->redirectToRoute('student_index');
-        } else {
-            $manager = $managerRegistry->getManager();
-            $manager->remove($student);
-            $manager->flush();
-            $this->addFlash('Info', 'Delete student successfully !');
-        }
+  #[Route('/detail/{id}', name: 'student_detail')]
+  public function studentDetail ($id, StudentRepository $studentRepository) {
+    $student = $studentRepository->find($id);
+    if ($student == null) {
+        $this->addFlash('Warning', 'Invalid student id !');
         return $this->redirectToRoute('student_index');
     }
-
-    /**
-     * @Route("/add", name="student_add")
-     */
-    public function studentAdd (Request $request) {
-        $student = new Student;
-        $form = $this->createForm(StudentType::class,$student);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $manager = $this->getDoctrine()->getManager();
-            $manager->persist($student);
-            $manager->flush();
-            $this->addFlash('Info','Add student successfully !');
-            return $this->redirectToRoute('student_index');
-        }
-        return $this->renderForm('student/add.html.twig',
+    return $this->render('student/show.html.twig',
         [
-            'studentForm' => $form
+            'student' => $student
+        ]);
+  }
+    #[Route('/new', name: 'student_new', methods: ['GET', 'POST'])]
+    public function new(Request $request, StudentRepository $studentRepository): Response
+    {
+        $student = new Student();
+        $form = $this->createForm(StudentType::class, $student);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $studentRepository->add($student);
+            return $this->redirectToRoute('student_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->renderForm('student/new.html.twig', [
+            'student' => $student,
+            'studentForm' => $form,
         ]);
     }
 
-    /**
-     * @Route("/edit/{id}", name="student_edit")
-     */
-    public function studentEdit ($id, Request $request) {
-        $student = $this->getDoctrine()->getRepository(Student::class)->find($id);
-        if ($student == null) {
-            $this->addFlash('Warning', 'student not existed !');
-            return $this->redirectToRoute('student_index');
-        } else {
-            $form = $this->createForm(StudentType::class,$student);
-            $form->handleRequest($request);
-            if ($form->isSubmitted() && $form->isValid()) {
-                $manager = $this->getDoctrine()->getManager();
-                $manager->persist($student);
-                $manager->flush();
-                $this->addFlash('Info','Edit student successfully !');
-                return $this->redirectToRoute('student_index');
-            }
-            return $this->renderForm('student/edit.html.twig',
-            [
-                'studentForm' => $form
-            ]);
-        }
+    #[Route('/{id}', name: 'student_show', methods: ['GET'])]
+    public function show(Student $student): Response
+    {
+        return $this->render('student/show.html.twig', [
+            'student' => $student,
+        ]);
     }
+
+    #[Route('/edit/{id}', name: 'student_edit', methods: ['GET', 'POST'])]
+    public function edit(Request $request, Student $student, StudentRepository $studentRepository): Response
+    {
+        $form = $this->createForm(StudentType::class, $student);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $studentRepository->add($student);
+            return $this->redirectToRoute('student_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->renderForm('student/edit.html.twig', [
+            'student' => $student,
+            'form' => $form,
+        ]);
+    }
+
+    #[Route('/delete/{id}', name: 'student_delete', methods: ['POST'])]
+    public function delete(Request $request, Student $student, StudentRepository $studentRepository): Response
+    {
+        if ($this->isCsrfTokenValid('delete'.$student->getId(), $request->request->get('_token'))) {
+            $studentRepository->remove($student);
+        }
+
+        return $this->redirectToRoute('student_index', [], Response::HTTP_SEE_OTHER);
+    }
+    #[IsGranted('ROLE_USER')]
+    #[Route('/search', name: 'search_student')]
+    public function searchStudent(StudentRepository $studentRepository, Request $request) {
+    $students = $studentRepository->searchStudent($request->get('keyword'));
+    if ($students == null) {
+      $this->addFlash("Warning", "No student found !");
+    }
+    $session = $request->getSession();
+    $session->set('search', true);
+    return $this->render('student/list.html.twig', 
+    [
+        'students' => $students,
+    ]);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  }
 }

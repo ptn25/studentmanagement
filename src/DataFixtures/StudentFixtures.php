@@ -11,7 +11,7 @@ class StudentFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         $sex = ["Male", "Female", "Others"];
-        for($i=1; $i<=20; $i++){
+        for($i=1; $i<=10; $i++){
             $key = array_rand($sex, 1);
             $student = new Student;
             $student->setName("Student $i")
