@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Lecturer;
 use App\Form\LecturerType;
 use App\Repository\LecturerRepository;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -86,14 +87,19 @@ class LecturerController extends AbstractController
     }
 
     #[Route('/{id}', name: 'lecturer_delete')]
-    public function delete(Request $request, Lecturer $lecturer, LecturerRepository $lecturerRepository): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$lecturer->getId(), $request->request->get('_token'))) {
-            $lecturerRepository->remove($lecturer);
+    public function lecturerDelete ($id, ManagerRegistry $managerRegistry) {
+        $lecturer = $managerRegistry->getRepository(Lecturer::class)->find($id);
+        if ($lecturer == null) {
+            $this->addFlash('Warning', 'Student not existed !');
+        
+        } else {
+            $manager = $managerRegistry->getManager();
+            $manager->remove($lecturer);
+            $manager->flush();
+            $this->addFlash('Info', 'Delete lecturer successfully !');
         }
-
-        return $this->redirectToRoute('lecturer_index', [], Response::HTTP_SEE_OTHER);
-    }
+        return $this->redirectToRoute('lecturer_index');
+      }
     #[IsGranted('ROLE_USER')]
     #[Route('/search', name: 'search_lecturer')]
     public function searchLecturer(LecturerRepository $LecturerRepository, Request $request) {
