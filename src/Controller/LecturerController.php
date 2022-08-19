@@ -85,7 +85,7 @@ class LecturerController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'lecturer_delete', methods: ['POST'])]
+    #[Route('/{id}', name: 'lecturer_delete')]
     public function delete(Request $request, Lecturer $lecturer, LecturerRepository $lecturerRepository): Response
     {
         if ($this->isCsrfTokenValid('delete'.$lecturer->getId(), $request->request->get('_token'))) {

@@ -4,10 +4,12 @@
 
 {% block body %}
     <h1>Edit Lecturer</h1>
-
+    
     {{ include('lecturer/_form.html.twig', {'button_label': 'Update'}) }}
-
+    {% if is_granted('ROLE_ADMIN') %}
     <a href="{{ path('lecturer_index') }}">back to list</a>
-
+    {% else %}
+    <a href="{{ path('lecturer_list') }}">back to list</a>
+    {% endif %}
     {{ include('lecturer/_delete_form.html.twig') }}
 {% endblock %}

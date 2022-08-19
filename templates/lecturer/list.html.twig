@@ -28,14 +28,6 @@
                 <a class="text-decoration-none" href="{{ path('lecturer_detail', {'id' : lecturer.id }) }}">
                     <img src="{{ asset('images/buttons/detail.png') }}" width="40" height="40">
                 </a>
-                <a class="text-decoration-none" href="{{ path('lecturer_edit', {'id' : lecturer.id }) }}">
-                    <img src="{{ asset('images/buttons/edit.png') }}" width="40" height="40">
-                </a>
-                <a class="text-decoration-none" href="{{ path('lecturer_delete', {'id' : lecturer.id }) }}"
-                onclick="return confirm('Are you sure to delete this lecturer ?');"
-                >
-                    <img src="{{ asset('images/buttons/delete.png') }}" width="40" height="40">
-                </a>
             </td>
         </tr>
     {% endfor %}
