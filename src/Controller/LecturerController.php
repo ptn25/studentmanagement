@@ -4,11 +4,13 @@ namespace App\Controller;
 
 use App\Entity\Lecturer;
 use App\Form\Lecturer1Type;
+use App\Repository\StudentRepository;
 use App\Repository\LecturerRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/lecturer')]
 class LecturerController extends AbstractController
@@ -22,18 +24,30 @@ class LecturerController extends AbstractController
         ]);
     }
 
-  #[IsGranted('ROLE_USER')]
-  #[Route('/list', name: 'lecturer_list')]
-  public function lecturerList () {
-    $lecturers = $this->getDoctrine()->getRepository(Lecturer::class)->findAll();
-    $session = new Session();
-    $session->set('search', false);
-    return $this->render('lecturer/list.html.twig',
-        [
-            'lecturers' => $lecturers
-        ]);
-  }
+    #[IsGranted('ROLE_USER')]
+    #[Route('/list', name: 'lecturer_list')]
+    public function lecturerList () {
+        $lecturers = $this->getDoctrine()->getRepository(Lecturer::class)->findAll();
+        $session = new Session();
+        $session->set('search', false);
+        return $this->render('lecturer/list.html.twig',
+            [
+                'lecturers' => $lecturers
+            ]);
+    }
 
+    #[Route('/detail/{id}', name: 'lecturer_detail', methods: ['GET'])]
+     public function lecturerDetail ($id, LecturerRepository $lecturerRepository) {
+            $lecturer = $lecturerRepository->find($id);
+            if ($lecturer == null) {
+                $this->addFlash('Warning', 'Invalid lecturer id !');
+                return $this->redirectToRoute('lecturer_index');
+            }
+            return $this->render('lecturer/show.html.twig',
+                [
+                    'lecturer' => $lecturer
+                ]);
+    }
     #[Route('/new', name: 'app_lecturer_new', methods: ['GET', 'POST'])]
     public function new(Request $request, LecturerRepository $lecturerRepository): Response
     {
@@ -43,7 +57,7 @@ class LecturerController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $lecturerRepository->add($lecturer);
-            return $this->redirectToRoute('app_lecturer_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('lecturer_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('lecturer/new.html.twig', [
@@ -52,15 +66,9 @@ class LecturerController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_lecturer_show', methods: ['GET'])]
-    public function show(Lecturer $lecturer): Response
-    {
-        return $this->render('lecturer/show.html.twig', [
-            'lecturer' => $lecturer,
-        ]);
-    }
+   
 
-    #[Route('/{id}/edit', name: 'app_lecturer_edit', methods: ['GET', 'POST'])]
+    #[Route('/edit/{id}', name: 'lecturer_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Lecturer $lecturer, LecturerRepository $lecturerRepository): Response
     {
         $form = $this->createForm(Lecturer1Type::class, $lecturer);
@@ -68,7 +76,7 @@ class LecturerController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $lecturerRepository->add($lecturer);
-            return $this->redirectToRoute('app_lecturer_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('lecturer_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('lecturer/edit.html.twig', [
@@ -84,7 +92,7 @@ class LecturerController extends AbstractController
             $lecturerRepository->remove($lecturer);
         }
 
-        return $this->redirectToRoute('app_lecturer_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('lecturer_index', [], Response::HTTP_SEE_OTHER);
     }
     #[IsGranted('ROLE_USER')]
     #[Route('/search', name: 'search_lecturer')]

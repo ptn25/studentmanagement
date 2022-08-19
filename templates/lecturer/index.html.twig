@@ -23,8 +23,8 @@
                 <td>{{ lecturer.dob ? lecturer.dob|date('Y-m-d') : '' }}</td>
                 <td>{{ lecturer.image }}</td>
                 <td>
-                    <a href="{{ path('app_lecturer_show', {'id': lecturer.id}) }}">show</a>
-                    <a href="{{ path('app_lecturer_edit', {'id': lecturer.id}) }}">edit</a>
+                    <a href="{{ path('lecturer_detail', {'id': lecturer.id}) }}">show</a>
+                    <a href="{{ path('lecturer_edit', {'id': lecturer.id}) }}">edit</a>
                 </td>
             </tr>
         {% else %}
