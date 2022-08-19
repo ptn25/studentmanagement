@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Lecturer;
-use App\Form\Lecturer1Type;
+use App\Form\LecturerType;
 use App\Repository\StudentRepository;
 use App\Repository\LecturerRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -48,11 +48,11 @@ class LecturerController extends AbstractController
                     'lecturer' => $lecturer
                 ]);
     }
-    #[Route('/new', name: 'app_lecturer_new', methods: ['GET', 'POST'])]
+    #[Route('/new', name: 'lecturer_new', methods: ['GET', 'POST'])]
     public function new(Request $request, LecturerRepository $lecturerRepository): Response
     {
         $lecturer = new Lecturer();
-        $form = $this->createForm(Lecturer1Type::class, $lecturer);
+        $form = $this->createForm(LecturerType::class, $lecturer);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

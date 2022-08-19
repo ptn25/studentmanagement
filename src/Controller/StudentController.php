@@ -60,7 +60,7 @@ class StudentController extends AbstractController
             return $this->redirectToRoute('student_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('student/new.html.twig', [
+        return $this->renderForm('student/add.html.twig', [
             'student' => $student,
             'studentForm' => $form,
         ]);

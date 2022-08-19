@@ -3,12 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\Classes;
-use App\Form\Classes1Type;
+use App\Form\ClassesType;
 use App\Repository\ClassesRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/classes')]
 class ClassesController extends AbstractController
@@ -25,7 +25,7 @@ class ClassesController extends AbstractController
     public function new(Request $request, ClassesRepository $classesRepository): Response
     {
         $class = new Classes();
-        $form = $this->createForm(Classes1Type::class, $class);
+        $form = $this->createForm(ClassesType::class, $class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

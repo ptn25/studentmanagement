@@ -29,7 +29,10 @@ class Lecturer
 
     #[ORM\ManyToMany(targetEntity: Subject::class, inversedBy: 'lecturers')]
     private $subjId;
-
+    public function __toString()
+    {
+        return $this -> image;
+    }
     public function __construct()
     {
         $this->classId = new ArrayCollection();
