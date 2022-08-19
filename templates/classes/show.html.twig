@@ -35,12 +35,14 @@
                 <th>Name</th>
                 <td>{{ class.name }}</td>
             </tr>
-             <tr>
-                <th>image</th>
-                <td>{{ Lecturer.image }}</td>
-            </tr>
+            
         </tbody>
-        <a href="{{ path('classes_index') }}">back to list</a>
+    {% if is_granted('ROLE_ADMIN') %}
+     <a href="{{ path('classes_index') }}">back to list</a>
+    {% else %}
+     <a href="{{ path('classes_list') }}">back to list</a>
+    {% endif %}
+       
     </table>
     {% endif %}
 {% endblock %}
