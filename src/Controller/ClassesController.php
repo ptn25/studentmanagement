@@ -36,7 +36,7 @@ class ClassesController extends AbstractController
             ]);
     }
 
-    #[Route('/new', name: 'app_classes_new', methods: ['GET', 'POST'])]
+    #[Route('/new', name: 'classes_new', methods: ['GET', 'POST'])]
     public function new(Request $request, ClassesRepository $classesRepository): Response
     {
         $class = new Classes();
@@ -54,7 +54,7 @@ class ClassesController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_classes_show', methods: ['GET'])]
+    #[Route('/{id}', name: 'classes_detail', methods: ['GET'])]
     public function show(Classes $class): Response
     {
         return $this->render('classes/show.html.twig', [
@@ -62,7 +62,7 @@ class ClassesController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_classes_edit', methods: ['GET', 'POST'])]
+    #[Route('/{id}/edit', name: 'classes_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Classes $class, ClassesRepository $classesRepository): Response
     {
         $form = $this->createForm(ClassesType::class, $class);
@@ -79,7 +79,7 @@ class ClassesController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_classes_delete', methods: ['POST'])]
+    #[Route('/{id}', name: 'classes_delete', methods: ['POST'])]
     public function delete(Request $request, Classes $class, ClassesRepository $classesRepository): Response
     {
         if ($this->isCsrfTokenValid('delete'.$class->getId(), $request->request->get('_token'))) {
