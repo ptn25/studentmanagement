@@ -1,13 +1,16 @@
-{% extends 'base.html.twig' %}
-
-{% block title %}Edit Classes{% endblock %}
+{% form_theme classesForm 'bootstrap_5_layout.html.twig' %}
+{% extends "base.html.twig" %}
 
 {% block body %}
-    <h1>Edit Classes</h1>
+    <div class="container col-md-7 text-center mt-3">
+        <div class="card p-3 bg-light">
+            <h3 class="alert alert-primary">Edit class</h3>
+            {{ form_start(classesForm) }}
 
-    {{ include('classes/_form.html.twig', {'button_label': 'Update'}) }}
+            {{ form_widget(classesForm) }}
+            <input class="btn btn-outline-danger" type="submit" value="Edit">
 
-    <a href="{{ path('classes_index') }}">back to list</a>
-
-    {{ include('classes/_delete_form.html.twig') }}
-{% endblock %}
+            {{ form_end(classesForm) }}
+        </div>
+    </div>
+{% endblock body %}

@@ -2,10 +2,12 @@
 
 namespace App\Entity;
 
-use App\Repository\SubjectRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use App\Entity\Mark;
+use App\Entity\Lecturer;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\SubjectRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity(repositoryClass: SubjectRepository::class)]
 class Subject

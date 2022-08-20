@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Classes;
 use App\Form\ClassesType;
 use App\Repository\ClassesRepository;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -50,7 +51,7 @@ class ClassesController extends AbstractController
 
         return $this->renderForm('classes/new.html.twig', [
             'class' => $class,
-            'form' => $form,
+            'classesForm' => $form,
         ]);
     }
 
@@ -75,19 +76,24 @@ class ClassesController extends AbstractController
 
         return $this->renderForm('classes/edit.html.twig', [
             'class' => $class,
-            'form' => $form,
+            'classesForm' => $form,
         ]);
     }
 
-    #[Route('/{id}', name: 'classes_delete', methods: ['POST'])]
-    public function delete(Request $request, Classes $class, ClassesRepository $classesRepository): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$class->getId(), $request->request->get('_token'))) {
-            $classesRepository->remove($class);
+    #[Route('delete/{id}', name: 'classes_delete')]
+    public function classDelete ($id, ManagerRegistry $managerRegistry) {
+        $classes = $managerRegistry->getRepository(Classes::class)->find($id);
+        if ($classes == null) {
+            $this->addFlash('Warning', 'classes not existed !');
+        
+        } else {
+            $manager = $managerRegistry->getManager();
+            $manager->remove($classes);
+            $manager->flush();
+            $this->addFlash('Info', 'Delete class successfully !');
         }
-
-        return $this->redirectToRoute('classes_index', [], Response::HTTP_SEE_OTHER);
-    }
+        return $this->redirectToRoute('classes_index');
+      }
     #[IsGranted('ROLE_USER')]
     #[Route('/search', name: 'search_classes')]
     public function searchClasses(ClassesRepository $ClassesRepository, Request $request) {

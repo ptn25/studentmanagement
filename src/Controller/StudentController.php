@@ -85,7 +85,7 @@ class StudentController extends AbstractController
     }
 
     #[Route('/delete/{id}', name: 'student_delete')]
-    public function bookDelete ($id, ManagerRegistry $managerRegistry) {
+    public function studentDelete ($id, ManagerRegistry $managerRegistry) {
         $student = $managerRegistry->getRepository(Student::class)->find($id);
         if ($student == null) {
             $this->addFlash('Warning', 'Student not existed !');

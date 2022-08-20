@@ -3,6 +3,19 @@
 
 {% block body %}
 <div class="container col-md-9 text-center mt-3">
+<div lecturer="row">
+				<div lecturer="col-md-7">
+					<div lecturer="row">
+						<div lecturer="col">
+							<div lecturer="form-group">
+								<form action="{{ path('search_lecturer') }}" method="post">
+									<input lecturer="form-control" type="search" name="keyword" placeholder="Search lecturer" required maxlength="10">
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 <table class="table table-light">
     <tr>
         <th colspan="6">

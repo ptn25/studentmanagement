@@ -1,15 +1,16 @@
-{% extends 'base.html.twig' %}
-
-{% block title %}Edit Lecturer{% endblock %}
+{% form_theme lecturerForm 'bootstrap_5_layout.html.twig' %}
+{% extends "base.html.twig" %}
 
 {% block body %}
-    <h1>Edit Lecturer</h1>
-    
-    {{ include('lecturer/_form.html.twig', {'button_label': 'Update'}) }}
-    {% if is_granted('ROLE_ADMIN') %}
-    <a href="{{ path('lecturer_index') }}">back to list</a>
-    {% else %}
-    <a href="{{ path('lecturer_list') }}">back to list</a>
-    {% endif %}
-    {{ include('lecturer/_delete_form.html.twig') }}
-{% endblock %}
+    <div class="container col-md-7 text-center mt-3">
+        <div class="card p-3 bg-light">
+            <h3 class="alert alert-primary">Edit lecturer</h3>
+            {{ form_start(lecturerForm) }}
+
+            {{ form_widget(lecturerForm) }}
+            <input class="btn btn-outline-danger" type="submit" value="Edit">
+
+            {{ form_end(lecturerForm) }}
+        </div>
+    </div>
+{% endblock body %}

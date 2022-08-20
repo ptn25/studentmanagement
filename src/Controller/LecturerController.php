@@ -82,7 +82,7 @@ class LecturerController extends AbstractController
 
         return $this->renderForm('lecturer/edit.html.twig', [
             'lecturer' => $lecturer,
-            'form' => $form,
+            'lecturerForm' => $form,    
         ]);
     }
 

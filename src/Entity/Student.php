@@ -2,10 +2,12 @@
 
 namespace App\Entity;
 
-use App\Repository\StudentRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use App\Entity\Mark;
+use App\Entity\Classes;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\StudentRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity(repositoryClass: StudentRepository::class)]
 class Student
@@ -34,8 +36,12 @@ class Student
     private $marks;
 
     #[ORM\ManyToOne(targetEntity: Classes::class, inversedBy: 'students')]
-    private $classId;
+    private $classId; 
 
+    public function __toString()
+    {
+        return $this -> name;
+    }
     public function __construct()
     {
         $this->marks = new ArrayCollection();

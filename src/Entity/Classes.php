@@ -2,10 +2,12 @@
 
 namespace App\Entity;
 
-use App\Repository\ClassesRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use App\Entity\Student;
+use App\Entity\Lecturer;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\ClassesRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity(repositoryClass: ClassesRepository::class)]
 class Classes
@@ -23,7 +25,6 @@ class Classes
 
     #[ORM\ManyToMany(targetEntity: Lecturer::class, mappedBy: 'classId')]
     private $lecturers;
-
     public function __construct()
     {
         $this->students = new ArrayCollection();

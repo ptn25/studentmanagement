@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Form;
-
 use App\Entity\Classes;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -14,6 +13,7 @@ class ClassesType extends AbstractType
         $builder
             ->add('name')
             ->add('lecturers')
+            ->add('students')
         ;
     }
 

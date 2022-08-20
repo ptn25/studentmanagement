@@ -3,6 +3,7 @@
 {% block title %}Lecturer{% endblock %}
 
 {% block body %}
+<div class="container col-md-8 text-center mt-3">
     <h1>Lecturer</h1>
 
     <table class="table">
@@ -44,13 +45,12 @@
                 <td>{{ lecturer.image }}</td>
             </tr>
         </tbody>
-    {% if is_granted('ROLE_ADMIN') %}
-    <a href="{{ path('lecturer_index') }}">back to list</a>
-    {% else %}
-    <a href="{{ path('lecturer_list') }}">back to list</a>
-    {% endif %}
-    {% endif %}
+        {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('lecturer_index') }}">back to list</a>
+        {% else %}
+        <a href="{{ path('lecturer_list') }}">back to list</a>
+        {% endif %}
+        {% endif %}
     </table>
-
-    {{ include('lecturer/_delete_form.html.twig') }}
+</div>
 {% endblock %}

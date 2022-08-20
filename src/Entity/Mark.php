@@ -2,8 +2,10 @@
 
 namespace App\Entity;
 
-use App\Repository\MarkRepository;
+use App\Entity\Student;
+use App\Entity\Subject;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\MarkRepository;
 
 #[ORM\Entity(repositoryClass: MarkRepository::class)]
 class Mark

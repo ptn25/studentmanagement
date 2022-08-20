@@ -1,11 +1,16 @@
-{% extends 'base.html.twig' %}
-
-{% block title %}New Classes{% endblock %}
+{% form_theme classesForm 'bootstrap_5_layout.html.twig' %}
+{% extends "base.html.twig" %}
 
 {% block body %}
-    <h1>Create new Classes</h1>
+    <div class="container col-md-7 text-center mt-3">
+        <div class="card p-3 bg-light">
+            <h3 class="alert alert-primary">Add Class</h3>
+            {{ form_start(classesForm) }}
 
-    {{ include('classes/_form.html.twig') }}
+            {{ form_widget(classesForm) }}
+            <input class="btn btn-outline-danger" type="submit" value="Add">
 
-    <a href="{{ path('classes_index') }}">back to list</a>
-{% endblock %}
+            {{ form_end(classesForm) }}
+        </div>
+    </div>
+{% endblock body %}

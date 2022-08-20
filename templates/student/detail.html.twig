@@ -27,6 +27,10 @@
                         <th>Student Address</th>
                         <td>{{ student.address }}</td>
                     </tr>
+                    <tr class ="h4">
+                        <th>Class</th>
+                        <td>{{ student.classId.name|default('GCH1003')}}</td>
+                    </tr>
                 </table>
             </div>
         </div>
