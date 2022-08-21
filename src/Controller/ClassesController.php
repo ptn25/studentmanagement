@@ -90,18 +90,22 @@ class ClassesController extends AbstractController
 
     #[Route('delete/{id}', name: 'classes_delete')]
     public function classDelete ($id, ManagerRegistry $managerRegistry) {
-        $classes = $managerRegistry->getRepository(Classes::class)->find($id);
-        if ($classes == null) {
+        $class = $managerRegistry->getRepository(Classes::class)->find($id);
+        if ($class == null) {
             $this->addFlash('Warning', 'Class not existed !');
-        
+        }
+        //check xem con student trong class khong truoc khi xoa
+        else if (count($class->getStudents()) > 0){
+            $this->addFlash('Warning', 'Can not delete this class !');
         } else {
             $manager = $managerRegistry->getManager();
-            $manager->remove($classes);
+            $manager->remove($class);
             $manager->flush();
             $this->addFlash('Info', 'Delete class successfully !');
         }
         return $this->redirectToRoute('classes_index');
-      }
+    }
+    
     #[IsGranted('ROLE_USER')]
     #[Route('/search', name: 'search_classes')]
     public function searchClasses(ClassesRepository $ClassesRepository, Request $request) {
@@ -112,8 +116,8 @@ class ClassesController extends AbstractController
     $session = $request->getSession();
     $session->set('search', true);
     return $this->render('Classes/list.html.twig', 
-    [
-        'classes' => $classes,
-    ]);
+        [
+            'classes' => $classes,
+        ]);
     }
 }

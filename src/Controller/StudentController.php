@@ -91,7 +91,6 @@ class StudentController extends AbstractController
         $student = $managerRegistry->getRepository(Student::class)->find($id);
         if ($student == null) {
             $this->addFlash('Warning', 'Student not existed !');
-        
         } else {
             $manager = $managerRegistry->getManager();
             $manager->remove($student);
@@ -111,8 +110,8 @@ class StudentController extends AbstractController
     $session = $request->getSession();
     $session->set('search', true);
     return $this->render('student/list.html.twig', 
-    [
-        'students' => $students,
-    ]);
-  }
+        [
+            'students' => $students,
+        ]);
+    }
 }
