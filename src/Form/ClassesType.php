@@ -12,8 +12,8 @@ class ClassesType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('lecturers')
-            ->add('students')
+            //->add('lecturers')
+            //->add('students')
         ;
     }
 

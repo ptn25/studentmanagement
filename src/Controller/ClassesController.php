@@ -92,7 +92,7 @@ class ClassesController extends AbstractController
     public function classDelete ($id, ManagerRegistry $managerRegistry) {
         $classes = $managerRegistry->getRepository(Classes::class)->find($id);
         if ($classes == null) {
-            $this->addFlash('Warning', 'classes not existed !');
+            $this->addFlash('Warning', 'Class not existed !');
         
         } else {
             $manager = $managerRegistry->getManager();

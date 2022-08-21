@@ -32,7 +32,7 @@ class LecturerType extends AbstractType
             ])
             ->add('image', TextType::class,
             [
-                'label' => 'Author image',
+                'label' => 'Lecturer Image',
                 'attr' => [
                     'maxlength' => 255
                 ]

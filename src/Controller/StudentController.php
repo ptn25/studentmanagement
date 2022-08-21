@@ -96,7 +96,7 @@ class StudentController extends AbstractController
             $manager = $managerRegistry->getManager();
             $manager->remove($student);
             $manager->flush();
-            $this->addFlash('Info', 'Delete book successfully !');
+            $this->addFlash('Info', 'Delete student successfully !');
         }
         return $this->redirectToRoute('student_index');
     }
