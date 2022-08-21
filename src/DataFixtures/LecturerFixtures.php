@@ -10,7 +10,7 @@ class LecturerFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        for($i=1; $i<=20; $i++){
+        for($i=1; $i<=10; $i++){
             $lecturer = new Lecturer;
             $lecturer->setName("Lecturer $i")
                 ->setDOB(\DateTime::createFromFormat('Y/m/d', '2003/08/21'))

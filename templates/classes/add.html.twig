@@ -1,16 +1,16 @@
-{% form_theme classesForm 'bootstrap_5_layout.html.twig' %}
+{% form_theme classForm 'bootstrap_5_layout.html.twig' %}
 {% extends "base.html.twig" %}
 
 {% block body %}
     <div class="container col-md-7 text-center mt-3">
         <div class="card p-3 bg-light">
-            <h3 class="alert alert-primary">Add Class</h3>
-            {{ form_start(classesForm) }}
+            <h3 class="alert alert-primary">Add class</h3>
+            {{ form_start(classForm) }}
 
-            {{ form_widget(classesForm) }}
+            {{ form_widget(classForm) }}
             <input class="btn btn-outline-danger" type="submit" value="Add">
 
-            {{ form_end(classesForm) }}
+            {{ form_end(classForm) }}
         </div>
     </div>
 {% endblock body %}

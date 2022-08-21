@@ -47,6 +47,18 @@ class LecturerRepository extends ServiceEntityRepository
         }
     }
 
+    public function searchLecturer($keyword) 
+    {
+        return $this->createQueryBuilder('lecturer')
+            ->andWhere('lecturer.name LIKE :key')
+            ->setParameter('key', '%' . $keyword . '%')
+            ->orderBy('lecturer.id', 'ASC')
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     // /**
     //  * @return Lecturer[] Returns an array of Lecturer objects
     //  */

@@ -1,4 +1,3 @@
-{# thiet ke giao dien cua admin theo dang list #}
 {% extends "base.html.twig" %}
 
 {% block body %}
@@ -49,7 +48,7 @@
             <td>
                 <a class="text-decoration-none" href="{{ path('student_detail', {'id' : student.id }) }}">
                     <img src="{{ asset('images/buttons/detail.png') }}" width="40" height="40">
-                </a>z
+                </a>
             </td>
         </tr>
     {% endfor %}

@@ -2,11 +2,13 @@
 
 namespace App\Form;
 
+use App\Entity\Classes;
 use App\Entity\Student;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class StudentType extends AbstractType
@@ -50,7 +52,15 @@ class StudentType extends AbstractType
                     'maxlength' => 255
                 ]
             ])
-            //->add('classId')
+            ->add('classId', EntityType::class,
+            [
+                'label' => 'Class',
+                'required' => true,
+                'class' => Classes::class,
+                'choice_label' => 'name',
+                'multiple' => false,    //neu chi duoc chon 1 option (relationship: 1)
+                'expanded' => true
+            ])
         ;
     }
 

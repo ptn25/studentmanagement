@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use App\Entity\Mark;
 use App\Entity\Classes;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\StudentRepository;
@@ -32,19 +31,12 @@ class Student
     #[ORM\Column(type: 'string', length: 255)]
     private $image;
 
-    #[ORM\OneToMany(mappedBy: 'stuId', targetEntity: Mark::class)]
-    private $marks;
-
     #[ORM\ManyToOne(targetEntity: Classes::class, inversedBy: 'students')]
     private $classId; 
 
     public function __toString()
     {
         return $this -> name;
-    }
-    public function __construct()
-    {
-        $this->marks = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -108,36 +100,6 @@ class Student
     public function setImage(string $image): self
     {
         $this->image = $image;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Mark>
-     */
-    public function getMarks(): Collection
-    {
-        return $this->marks;
-    }
-
-    public function addMark(Mark $mark): self
-    {
-        if (!$this->marks->contains($mark)) {
-            $this->marks[] = $mark;
-            $mark->setStuId($this);
-        }
-
-        return $this;
-    }
-
-    public function removeMark(Mark $mark): self
-    {
-        if ($this->marks->removeElement($mark)) {
-            // set the owning side to null (unless already changed)
-            if ($mark->getStuId() === $this) {
-                $mark->setStuId(null);
-            }
-        }
 
         return $this;
     }

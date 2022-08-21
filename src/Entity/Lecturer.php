@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use App\Entity\Classes;
-use App\Entity\Subject;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\LecturerRepository;
 use Doctrine\Common\Collections\Collection;
@@ -29,8 +28,6 @@ class Lecturer
     #[ORM\ManyToMany(targetEntity: Classes::class, inversedBy: 'lecturers')]
     private $classId;
 
-    #[ORM\ManyToMany(targetEntity: Subject::class, inversedBy: 'lecturers')]
-    private $subjId;
     public function __toString()
     {
         return $this -> image;
@@ -38,7 +35,6 @@ class Lecturer
     public function __construct()
     {
         $this->classId = new ArrayCollection();
-        $this->subjId = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -102,30 +98,6 @@ class Lecturer
     public function removeClassId(Classes $classId): self
     {
         $this->classId->removeElement($classId);
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Subject>
-     */
-    public function getSubjId(): Collection
-    {
-        return $this->subjId;
-    }
-
-    public function addSubjId(Subject $subjId): self
-    {
-        if (!$this->subjId->contains($subjId)) {
-            $this->subjId[] = $subjId;
-        }
-
-        return $this;
-    }
-
-    public function removeSubjId(Subject $subjId): self
-    {
-        $this->subjId->removeElement($subjId);
 
         return $this;
     }

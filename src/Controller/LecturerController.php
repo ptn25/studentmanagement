@@ -37,33 +37,35 @@ class LecturerController extends AbstractController
             ]);
     }
 
-    #[Route('/detail/{id}', name: 'lecturer_detail', methods: ['GET'])]
-     public function lecturerDetail ($id, LecturerRepository $lecturerRepository) {
-            $lecturer = $lecturerRepository->find($id);
-            if ($lecturer == null) {
-                $this->addFlash('Warning', 'Invalid lecturer id !');
-                return $this->redirectToRoute('lecturer_index');
-            }
-            return $this->render('lecturer/detail.html.twig',
-                [
-                    'lecturer' => $lecturer
-                ]);
+    #[Route('/detail/{id}', name: 'lecturer_detail')]
+    public function lecturerDetail ($id, LecturerRepository $lecturerRepository) {
+        $lecturer = $lecturerRepository->find($id);
+        if ($lecturer == null) {
+            $this->addFlash('Warning', 'Invalid lecturer id !');
+            return $this->redirectToRoute('lecturer_index');
+        }
+        return $this->render('lecturer/detail.html.twig',
+            [
+                'lecturer' => $lecturer
+            ]);
     }
-    #[Route('/new', name: 'lecturer_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, LecturerRepository $lecturerRepository): Response
+
+    #[Route('/add', name: 'lecturer_add', methods: ['GET', 'POST'])]
+    public function lecturerAdd(Request $request)
     {
         $lecturer = new Lecturer();
         $form = $this->createForm(LecturerType::class, $lecturer);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
-            $lecturerRepository->add($lecturer);
-            return $this->redirectToRoute('lecturer_index', [], Response::HTTP_SEE_OTHER);
+            $manager = $this->getDoctrine()->getManager();
+            $manager->persist($lecturer);
+            $manager->flush();
+            $this->addFlash('Info','Add lecturer successfully !');
+            return $this->redirectToRoute('lecturer_index');
         }
-
-        return $this->renderForm('lecturer/new.html.twig', [
-            'lecturer' => $lecturer,
-            'form' => $form,
+        return $this->renderForm('lecturer/add.html.twig',
+        [
+            'lecturerForm' => $form
         ]);
     }
 
@@ -86,11 +88,11 @@ class LecturerController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'lecturer_delete')]
+    #[Route('/delete/{id}', name: 'lecturer_delete')]
     public function lecturerDelete ($id, ManagerRegistry $managerRegistry) {
         $lecturer = $managerRegistry->getRepository(Lecturer::class)->find($id);
         if ($lecturer == null) {
-            $this->addFlash('Warning', 'Student not existed !');
+            $this->addFlash('Warning', 'Lecturer not existed !');
         
         } else {
             $manager = $managerRegistry->getManager();
@@ -99,11 +101,12 @@ class LecturerController extends AbstractController
             $this->addFlash('Info', 'Delete lecturer successfully !');
         }
         return $this->redirectToRoute('lecturer_index');
-      }
+    }
+
     #[IsGranted('ROLE_USER')]
     #[Route('/search', name: 'search_lecturer')]
-    public function searchLecturer(LecturerRepository $LecturerRepository, Request $request) {
-    $lecturers = $LecturerRepository->searchLecturer($request->get('keyword'));
+    public function searchLecturer(LecturerRepository $lecturerRepository, Request $request) {
+    $lecturers = $lecturerRepository->searchLecturer($request->get('keyword'));
     if ($lecturers == null) {
       $this->addFlash("Warning", "No lecturer found !");
     }
@@ -113,5 +116,5 @@ class LecturerController extends AbstractController
     [
         'lecturers' => $lecturers,
     ]);
-    }
+  }
 }

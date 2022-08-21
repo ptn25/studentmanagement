@@ -5,19 +5,19 @@
 <div class="container col-md-9 text-center mt-3">
 <table class="table table-light">
     <tr>
-        <th colspan="6">
-            <h1 class="text text-primary">lecturer List</h1>
+        <th colspan="3">
+            <h1 class="text text-primary">Lecturer List</h1>
         </th>
         <th>
-            <a class="text-decoration-none" href="{{ path('lecturer_new') }}">
+            <a class="text-decoration-none" href="{{ path('lecturer_add') }}">
                 <img src="{{ asset('images/buttons/add.png') }}" width="40" height="40">
             </a>
         </th>
     </tr>
     <tr>
-        <th class="text text-success">lecturer Id</th>
-        <th class="text text-success">lecturer Name</th>
-        <th class="text text-success">lecturer Image</th>
+        <th class="text text-success">Lecturer Id</th>
+        <th class="text text-success">Lecturer Name</th>
+        <th class="text text-success">Lecturer Image</th>
         <th class="text text-success">Actions</th>
     </tr>
     {% for lecturer in lecturers %}

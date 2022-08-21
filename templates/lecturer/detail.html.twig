@@ -1,56 +1,43 @@
-{% extends 'base.html.twig' %}
-
-{% block title %}Lecturer{% endblock %}
+{% extends "base.html.twig" %}
 
 {% block body %}
 <div class="container col-md-8 text-center mt-3">
-    <h1>Lecturer</h1>
-
-    <table class="table">
-    {% if is_granted('ROLE_ADMIN') %}
-        <tbody>
+   <div class="row">
+      <div class="col-4">
+         <div class="card">
+            <img src="{{ lecturer.image }}" width="300" height="300">
+         </div>
+      </div>
+      <div class="col-6">
+         <table class="table table-bordered">
             <tr>
-                <th>Id</th>
-                <td>{{ lecturer.id }}</td>
+               <th colspan="2" class="bg-light">
+                  <h2 class="text-danger"> Lecturer Information </h2>
+               </th>
             </tr>
-            <tr>
-                <th>Name</th>
-                <td>{{ lecturer.name }}</td>
+            <tr class="h4">
+               <th>Name</th>
+               <td>{{ lecturer.name }}</td>
             </tr>
-            <tr>
-                <th>Dob</th>
-                <td>{{ lecturer.dob ? lecturer.dob|date('Y-m-d') : '' }}</td>
+            <tr class="h4">
+                <th>Lecturer D.O.B</th>
+                <td>{{ lecturer.dob | date('d/m/Y') }}</td>
             </tr>
-            <tr>
-                <th>Image</th>
-                <td>{{ lecturer.image }}</td>
+            <tr class="h4">
+               <th class="col-md-4">Class List</th>
+               <td class="col-md-8">
+               {% if lecturer.classId != null %}
+                  {% for class in lecturer.classId %}
+                     <a href="{{ path('classes_detail', {'id' : class.id })}}">
+                        {{ class.name }} 
+                     </a>
+                     <br>
+                  {% endfor %}
+               {% endif %}
+               </td>
             </tr>
-        </tbody>
-        {% else %}
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ lecturer.id }}</td>
-            </tr>
-            <tr>
-                <th>Name</th>
-                <td>{{ lecturer.name }}</td>
-            </tr>
-            <tr>
-                <th>Dob</th>
-                <td>{{ lecturer.dob ? lecturer.dob|date('Y-m-d') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Image</th>
-                <td>{{ lecturer.image }}</td>
-            </tr>
-        </tbody>
-        {% if is_granted('ROLE_ADMIN') %}
-        <a href="{{ path('lecturer_index') }}">back to list</a>
-        {% else %}
-        <a href="{{ path('lecturer_list') }}">back to list</a>
-        {% endif %}
-        {% endif %}
-    </table>
+         </table>
+      </div>
+   </div>
 </div>
 {% endblock %}

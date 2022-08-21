@@ -1,0 +1,51 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+    <div class="container col-md-8 text-center mt-3">
+        <div class="row">
+            <div class="col-12">
+                <table class="table table-bordered">
+                    <tr>
+                        <th colspan="2" class="bg-success">
+                            <h2 class="text-danger">{{ class.name }}</h2>
+                        </th>
+                    </tr>
+                    <tr class="h4">
+                        <th class="col-md-6">Total students</th>
+                        <td class="col-md-7">{{ class.students | length }}</td>
+                     </tr>
+                     <tr class="h4">
+                        <th class="col-md-6">Student List</th>
+                        <td class="col-md-7">
+                            {% if class.students != null %}
+                                {% for student in class.students %}
+                                 <a href="{{ path('student_detail', {'id' : student.id })}}">
+                                    {{ student.name }} 
+                                 </a>
+                                 <br>
+                                {% endfor %}
+                            {% else %}
+                                <i>N/A</i>
+                           {% endif %}
+                        </td>
+                     </tr>
+                    <tr class="h4">
+                        <th>Lecturer(s)</th>
+                        <td>
+                            {% if class.lecturers == null %}
+                                <i>Undefined</i>
+                            {% else %}
+                                {% for lecturer in class.lecturers %}
+                                    <a class="text-decoration-none" href="{{ path('lecturer_detail', {'id' : lecturer.id })}}">
+                                        {{ lecturer.name }}
+                                    </a>
+                                    <br>
+                                {% endfor %}
+                            {% endif %}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock body %}

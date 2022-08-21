@@ -20,16 +20,24 @@
                         <td>{{ student.dob | date('d/m/Y') }}</td>
                     </tr>
                     <tr class="h4">
-                        <th>Sex</th>
+                        <th>Student Sex</th>
                         <td>{{ student.sex }}</td>
                     </tr>
                     <tr class="h4">
-                        <th>Student Address</th>
-                        <td>{{ student.address }}</td>
+                            <th>Student Address</th>
+                            <td>{{ student.address }}</td>
                     </tr>
-                    <tr class ="h4">
-                        <th>Class</th>
-                        <td>{{ student.classId.name|default('GCH1003')}}</td>
+                    <tr class="h4">
+                        <th>Student Class</th>
+                        <td>
+                            {% if student.classId != null %}
+                                <a class="text-decoration-none" href="{{ path('classes_detail', {'id' : student.classId.id })}}">
+                                    {{ student.classId.name }}
+                                </a>
+                            {% else %}
+                                <i>N/A</i>
+                            {% endif %}
+                        </td>
                     </tr>
                 </table>
             </div>

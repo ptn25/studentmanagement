@@ -37,34 +37,42 @@ class ClassesController extends AbstractController
             ]);
     }
 
-    #[Route('/new', name: 'classes_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, ClassesRepository $classesRepository): Response
+    #[Route('/add', name: 'classes_add', methods: ['GET', 'POST'])]
+    public function classAdd(Request $request)
     {
         $class = new Classes();
         $form = $this->createForm(ClassesType::class, $class);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
-            $classesRepository->add($class);
-            return $this->redirectToRoute('classes_index', [], Response::HTTP_SEE_OTHER);
+            $manager = $this->getDoctrine()->getManager();
+            $manager->persist($class);
+            $manager->flush();
+            $this->addFlash('Info','Add class successfully !');
+            return $this->redirectToRoute('classes_index');
         }
-
-        return $this->renderForm('classes/new.html.twig', [
-            'class' => $class,
-            'classesForm' => $form,
+        return $this->renderForm('classes/add.html.twig',
+        [
+            'classForm' => $form
         ]);
     }
 
-    #[Route('/{id}', name: 'classes_detail', methods: ['GET'])]
-    public function show(Classes $class): Response
+    #[Route('/detail/{id}', name: 'classes_detail')]
+    public function classDetail($id, ClassesRepository $classesRepository)
     {
-        return $this->render('classes/show.html.twig', [
-            'class' => $class,
-        ]);
+        $class = $classesRepository->find($id);
+        if ($class == null) {
+            $this->addFlash('Warning', 'Invalid class id !');
+            return $this->redirectToRoute('classes_index');
+        }
+        return $this->render('classes/detail.html.twig',
+            [
+                'class' => $class
+            ]
+        );
     }
 
     #[Route('/{id}/edit', name: 'classes_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Classes $class, ClassesRepository $classesRepository): Response
+    public function classEdit(Request $request, Classes $class, ClassesRepository $classesRepository): Response
     {
         $form = $this->createForm(ClassesType::class, $class);
         $form->handleRequest($request);

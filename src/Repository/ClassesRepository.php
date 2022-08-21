@@ -47,6 +47,18 @@ class ClassesRepository extends ServiceEntityRepository
         }
     }
 
+    public function searchClasses($keyword) 
+    {
+        return $this->createQueryBuilder('class')
+            ->andWhere('class.name LIKE :key')
+            ->setParameter('key', '%' . $keyword . '%')
+            ->orderBy('class.id', 'ASC')
+            ->setMaxResults(20)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     // /**
     //  * @return Classes[] Returns an array of Classes objects
     //  */

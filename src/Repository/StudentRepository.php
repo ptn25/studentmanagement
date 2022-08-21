@@ -47,6 +47,18 @@ class StudentRepository extends ServiceEntityRepository
         }
     }
 
+    public function searchStudent($keyword) 
+    {
+        return $this->createQueryBuilder('student')
+            ->andWhere('student.name LIKE :key')
+            ->setParameter('key', '%' . $keyword . '%')
+            ->orderBy('student.id', 'ASC')
+            ->setMaxResults(20)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     // /**
     //  * @return Student[] Returns an array of Student objects
     //  */
