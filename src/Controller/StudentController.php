@@ -50,6 +50,7 @@ class StudentController extends AbstractController
         ]);
     }
 
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/add', name: 'student_add', methods: ['GET', 'POST'])]
     public function studentAdd(Request $request)
     {
