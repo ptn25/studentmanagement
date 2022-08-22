@@ -25,6 +25,7 @@ class Classes
 
     #[ORM\ManyToMany(targetEntity: Lecturer::class, mappedBy: 'classId')]
     private $lecturers;
+    
     public function __construct()
     {
         $this->students = new ArrayCollection();
