@@ -75,7 +75,7 @@ class ClassesController extends AbstractController
     public function classEdit ($id, Request $request) {
         $class = $this->getDoctrine()->getRepository(Classes::class)->find($id);
         if ($class == null) {
-            $this->addFlash('Warning', 'class not existed !');
+            $this->addFlash('Warning', 'Class not existed !');
             return $this->redirectToRoute('classes_index');
         } else {
             $form = $this->createForm(ClassesType::class,$class);

@@ -74,7 +74,7 @@ class StudentController extends AbstractController
     public function studentEdit ($id, Request $request) {
         $student = $this->getDoctrine()->getRepository(Student::class)->find($id);
         if ($student == null) {
-            $this->addFlash('Warning', 'student not existed !');
+            $this->addFlash('Warning', 'Student not existed !');
             return $this->redirectToRoute('student_index');
         } else {
             $form = $this->createForm(StudentType::class,$student);

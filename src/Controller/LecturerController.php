@@ -75,7 +75,7 @@ class LecturerController extends AbstractController
     public function lecturerEdit ($id, Request $request) {
         $lecturer = $this->getDoctrine()->getRepository(Lecturer::class)->find($id);
         if ($lecturer == null) {
-            $this->addFlash('Warning', 'lecturer not existed !');
+            $this->addFlash('Warning', 'Lecturer not existed !');
             return $this->redirectToRoute('lecturer_index');
         } else {
             $form = $this->createForm(LecturerType::class,$lecturer);
