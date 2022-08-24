@@ -70,21 +70,27 @@ class StudentController extends AbstractController
         ]);
     }
 
-    #[Route('/edit/{id}', name: 'student_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Student $student, StudentRepository $studentRepository): Response
-    {
-        $form = $this->createForm(StudentType::class, $student);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $studentRepository->add($student);
-            return $this->redirectToRoute('student_index', [], Response::HTTP_SEE_OTHER);
+    #[Route('/edit/{id}', name: 'student_edit')]
+    public function studentEdit ($id, Request $request) {
+        $student = $this->getDoctrine()->getRepository(Student::class)->find($id);
+        if ($student == null) {
+            $this->addFlash('Warning', 'student not existed !');
+            return $this->redirectToRoute('student_index');
+        } else {
+            $form = $this->createForm(StudentType::class,$student);
+            $form->handleRequest($request);
+            if ($form->isSubmitted() && $form->isValid()) {
+                $manager = $this->getDoctrine()->getManager();
+                $manager->persist($student);
+                $manager->flush();
+                $this->addFlash('Info','Edit student successfully !');
+                return $this->redirectToRoute('student_index');
+            }
+            return $this->renderForm('student/edit.html.twig',
+            [
+                'studentForm' => $form
+            ]);
         }
-
-        return $this->renderForm('student/edit.html.twig', [
-            'student' => $student,
-            'studentForm' => $form,
-        ]);
     }
 
     #[Route('/delete/{id}', name: 'student_delete')]

@@ -71,21 +71,27 @@ class LecturerController extends AbstractController
 
    
 
-    #[Route('/edit/{id}', name: 'lecturer_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Lecturer $lecturer, LecturerRepository $lecturerRepository): Response
-    {
-        $form = $this->createForm(LecturerType::class, $lecturer);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $lecturerRepository->add($lecturer);
-            return $this->redirectToRoute('lecturer_index', [], Response::HTTP_SEE_OTHER);
+    #[Route('/edit/{id}', name: 'lecturer_edit')]
+    public function lecturerEdit ($id, Request $request) {
+        $lecturer = $this->getDoctrine()->getRepository(Lecturer::class)->find($id);
+        if ($lecturer == null) {
+            $this->addFlash('Warning', 'lecturer not existed !');
+            return $this->redirectToRoute('lecturer_index');
+        } else {
+            $form = $this->createForm(LecturerType::class,$lecturer);
+            $form->handleRequest($request);
+            if ($form->isSubmitted() && $form->isValid()) {
+                $manager = $this->getDoctrine()->getManager();
+                $manager->persist($lecturer);
+                $manager->flush();
+                $this->addFlash('Info','Edit lecturer successfully !');
+                return $this->redirectToRoute('lecturer_index');
+            }
+            return $this->renderForm('lecturer/edit.html.twig',
+            [
+                'lecturerForm' => $form
+            ]);
         }
-
-        return $this->renderForm('lecturer/edit.html.twig', [
-            'lecturer' => $lecturer,
-            'lecturerForm' => $form,    
-        ]);
     }
 
     #[Route('/delete/{id}', name: 'lecturer_delete')]

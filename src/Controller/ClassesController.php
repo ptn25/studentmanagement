@@ -71,21 +71,27 @@ class ClassesController extends AbstractController
         );
     }
 
-    #[Route('/{id}/edit', name: 'classes_edit', methods: ['GET', 'POST'])]
-    public function classEdit(Request $request, Classes $class, ClassesRepository $classesRepository): Response
-    {
-        $form = $this->createForm(ClassesType::class, $class);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $classesRepository->add($class);
-            return $this->redirectToRoute('classes_index', [], Response::HTTP_SEE_OTHER);
+    #[Route('/{id}/edit', name: 'classes_edit')]
+    public function classEdit ($id, Request $request) {
+        $class = $this->getDoctrine()->getRepository(Classes::class)->find($id);
+        if ($class == null) {
+            $this->addFlash('Warning', 'class not existed !');
+            return $this->redirectToRoute('classes_index');
+        } else {
+            $form = $this->createForm(ClassesType::class,$class);
+            $form->handleRequest($request);
+            if ($form->isSubmitted() && $form->isValid()) {
+                $manager = $this->getDoctrine()->getManager();
+                $manager->persist($class);
+                $manager->flush();
+                $this->addFlash('Info','Edit class successfully !');
+                return $this->redirectToRoute('classes_index');
+            }
+            return $this->renderForm('classes/edit.html.twig',
+            [
+                'classesForm' => $form
+            ]);
         }
-
-        return $this->renderForm('classes/edit.html.twig', [
-            'class' => $class,
-            'classesForm' => $form,
-        ]);
     }
 
     #[Route('delete/{id}', name: 'classes_delete')]
