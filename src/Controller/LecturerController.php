@@ -49,7 +49,8 @@ class LecturerController extends AbstractController
                 'lecturer' => $lecturer
             ]);
     }
-
+    
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/add', name: 'lecturer_add', methods: ['GET', 'POST'])]
     public function lecturerAdd(Request $request)
     {
@@ -70,7 +71,7 @@ class LecturerController extends AbstractController
     }
 
    
-
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/edit/{id}', name: 'lecturer_edit')]
     public function lecturerEdit ($id, Request $request) {
         $lecturer = $this->getDoctrine()->getRepository(Lecturer::class)->find($id);
@@ -94,6 +95,7 @@ class LecturerController extends AbstractController
         }
     }
 
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/delete/{id}', name: 'lecturer_delete')]
     public function lecturerDelete ($id, ManagerRegistry $managerRegistry) {
         $lecturer = $managerRegistry->getRepository(Lecturer::class)->find($id);
